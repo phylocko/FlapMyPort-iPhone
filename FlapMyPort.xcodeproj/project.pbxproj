@@ -1,0 +1,312 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F5B60A3E1D5116DE0088A5FA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B60A3D1D5116DE0088A5FA /* main.m */; };
+		F5B60A411D5116DE0088A5FA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B60A401D5116DE0088A5FA /* AppDelegate.m */; };
+		F5B60A441D5116DE0088A5FA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B60A431D5116DE0088A5FA /* ViewController.m */; };
+		F5B60A471D5116DE0088A5FA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5B60A451D5116DE0088A5FA /* Main.storyboard */; };
+		F5B60A491D5116DE0088A5FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5B60A481D5116DE0088A5FA /* Assets.xcassets */; };
+		F5B60A4C1D5116DE0088A5FA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5B60A4A1D5116DE0088A5FA /* LaunchScreen.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F5B60A391D5116DE0088A5FA /* FlapMyPort.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlapMyPort.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F5B60A3D1D5116DE0088A5FA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F5B60A3F1D5116DE0088A5FA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		F5B60A401D5116DE0088A5FA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		F5B60A421D5116DE0088A5FA /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		F5B60A431D5116DE0088A5FA /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		F5B60A461D5116DE0088A5FA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F5B60A481D5116DE0088A5FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F5B60A4B1D5116DE0088A5FA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F5B60A4D1D5116DE0088A5FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F5B60A361D5116DE0088A5FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F5B60A301D5116DE0088A5FA = {
+			isa = PBXGroup;
+			children = (
+				F5B60A3B1D5116DE0088A5FA /* FlapMyPort */,
+				F5B60A3A1D5116DE0088A5FA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F5B60A3A1D5116DE0088A5FA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F5B60A391D5116DE0088A5FA /* FlapMyPort.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F5B60A3B1D5116DE0088A5FA /* FlapMyPort */ = {
+			isa = PBXGroup;
+			children = (
+				F5B60A3F1D5116DE0088A5FA /* AppDelegate.h */,
+				F5B60A401D5116DE0088A5FA /* AppDelegate.m */,
+				F5B60A421D5116DE0088A5FA /* ViewController.h */,
+				F5B60A431D5116DE0088A5FA /* ViewController.m */,
+				F5B60A451D5116DE0088A5FA /* Main.storyboard */,
+				F5B60A481D5116DE0088A5FA /* Assets.xcassets */,
+				F5B60A4A1D5116DE0088A5FA /* LaunchScreen.storyboard */,
+				F5B60A4D1D5116DE0088A5FA /* Info.plist */,
+				F5B60A3C1D5116DE0088A5FA /* Supporting Files */,
+			);
+			path = FlapMyPort;
+			sourceTree = "<group>";
+		};
+		F5B60A3C1D5116DE0088A5FA /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F5B60A3D1D5116DE0088A5FA /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F5B60A381D5116DE0088A5FA /* FlapMyPort */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F5B60A501D5116DE0088A5FA /* Build configuration list for PBXNativeTarget "FlapMyPort" */;
+			buildPhases = (
+				F5B60A351D5116DE0088A5FA /* Sources */,
+				F5B60A361D5116DE0088A5FA /* Frameworks */,
+				F5B60A371D5116DE0088A5FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FlapMyPort;
+			productName = FlapMyPort;
+			productReference = F5B60A391D5116DE0088A5FA /* FlapMyPort.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F5B60A311D5116DE0088A5FA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0800;
+				ORGANIZATIONNAME = "Vladislav Pavkin";
+				TargetAttributes = {
+					F5B60A381D5116DE0088A5FA = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 38RKUADJAV;
+						DevelopmentTeamName = "Vladislav Pavkin";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = F5B60A341D5116DE0088A5FA /* Build configuration list for PBXProject "FlapMyPort" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F5B60A301D5116DE0088A5FA;
+			productRefGroup = F5B60A3A1D5116DE0088A5FA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F5B60A381D5116DE0088A5FA /* FlapMyPort */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F5B60A371D5116DE0088A5FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F5B60A4C1D5116DE0088A5FA /* LaunchScreen.storyboard in Resources */,
+				F5B60A491D5116DE0088A5FA /* Assets.xcassets in Resources */,
+				F5B60A471D5116DE0088A5FA /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F5B60A351D5116DE0088A5FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F5B60A441D5116DE0088A5FA /* ViewController.m in Sources */,
+				F5B60A411D5116DE0088A5FA /* AppDelegate.m in Sources */,
+				F5B60A3E1D5116DE0088A5FA /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		F5B60A451D5116DE0088A5FA /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F5B60A461D5116DE0088A5FA /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		F5B60A4A1D5116DE0088A5FA /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F5B60A4B1D5116DE0088A5FA /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F5B60A4E1D5116DE0088A5FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		F5B60A4F1D5116DE0088A5FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F5B60A511D5116DE0088A5FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = FlapMyPort/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = ru.tablespoon.FlapMyPort;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		F5B60A521D5116DE0088A5FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = FlapMyPort/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = ru.tablespoon.FlapMyPort;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F5B60A341D5116DE0088A5FA /* Build configuration list for PBXProject "FlapMyPort" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F5B60A4E1D5116DE0088A5FA /* Debug */,
+				F5B60A4F1D5116DE0088A5FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F5B60A501D5116DE0088A5FA /* Build configuration list for PBXNativeTarget "FlapMyPort" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F5B60A511D5116DE0088A5FA /* Debug */,
+				F5B60A521D5116DE0088A5FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F5B60A311D5116DE0088A5FA /* Project object */;
+}
