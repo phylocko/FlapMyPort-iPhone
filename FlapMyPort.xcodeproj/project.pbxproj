@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		F54983E71D513E45004E2D02 /* w180.png in Resources */ = {isa = PBXBuildFile; fileRef = F54983E61D513E45004E2D02 /* w180.png */; };
+		F571C3961D5CAF14000F2D12 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F571C3951D5CAF14000F2D12 /* Settings.bundle */; };
+		F57C308C1D5CAA6300EAFF0F /* URLManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F57C308B1D5CAA6300EAFF0F /* URLManager.m */; };
 		F5B60A3E1D5116DE0088A5FA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B60A3D1D5116DE0088A5FA /* main.m */; };
 		F5B60A411D5116DE0088A5FA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B60A401D5116DE0088A5FA /* AppDelegate.m */; };
 		F5B60A441D5116DE0088A5FA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B60A431D5116DE0088A5FA /* ViewController.m */; };
@@ -26,6 +28,9 @@
 
 /* Begin PBXFileReference section */
 		F54983E61D513E45004E2D02 /* w180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = w180.png; sourceTree = "<group>"; };
+		F571C3951D5CAF14000F2D12 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		F57C308A1D5CAA6300EAFF0F /* URLManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLManager.h; sourceTree = "<group>"; };
+		F57C308B1D5CAA6300EAFF0F /* URLManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLManager.m; sourceTree = "<group>"; };
 		F5B60A391D5116DE0088A5FA /* FlapMyPort.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlapMyPort.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5B60A3D1D5116DE0088A5FA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F5B60A3F1D5116DE0088A5FA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -88,6 +93,7 @@
 				F5B60A571D51172F0088A5FA /* Cells */,
 				F5B60A3F1D5116DE0088A5FA /* AppDelegate.h */,
 				F5B60A401D5116DE0088A5FA /* AppDelegate.m */,
+				F571C3951D5CAF14000F2D12 /* Settings.bundle */,
 				F5B60A421D5116DE0088A5FA /* ViewController.h */,
 				F5B60A431D5116DE0088A5FA /* ViewController.m */,
 				F5B60A611D5118060088A5FA /* FlapTableViewController.h */,
@@ -119,6 +125,8 @@
 		F5B60A531D5117120088A5FA /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				F57C308A1D5CAA6300EAFF0F /* URLManager.h */,
+				F57C308B1D5CAA6300EAFF0F /* URLManager.m */,
 				F5B60A541D5117250088A5FA /* FlapManager.h */,
 				F5B60A551D5117250088A5FA /* FlapManager.m */,
 			);
@@ -200,6 +208,7 @@
 			files = (
 				F5B60A4C1D5116DE0088A5FA /* LaunchScreen.storyboard in Resources */,
 				F5B60A491D5116DE0088A5FA /* Assets.xcassets in Resources */,
+				F571C3961D5CAF14000F2D12 /* Settings.bundle in Resources */,
 				F5B60A471D5116DE0088A5FA /* Main.storyboard in Resources */,
 				F54983E71D513E45004E2D02 /* w180.png in Resources */,
 			);
@@ -221,6 +230,7 @@
 				F5B60A411D5116DE0088A5FA /* AppDelegate.m in Sources */,
 				F5B60A561D5117250088A5FA /* FlapManager.m in Sources */,
 				F5B60A601D5117410088A5FA /* FlapHistoryCell.m in Sources */,
+				F57C308C1D5CAA6300EAFF0F /* URLManager.m in Sources */,
 				F5B60A6B1D5118060088A5FA /* FlapTableViewController.m in Sources */,
 				F5B60A3E1D5116DE0088A5FA /* main.m in Sources */,
 			);

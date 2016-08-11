@@ -7,7 +7,7 @@
 //
 
 #import "FlapHistoryViewController.h"
-#import "FlapManager.h"
+#import "URLManager.h"
 #import "PortFlap.h"
 #import "HostCell.h"
 #import "FlapCell.h"
@@ -16,7 +16,7 @@
 @interface FlapHistoryViewController () <UITableViewDataSource, UITableViewDelegate>
 {
     NSMutableArray	*flapList;
-    FlapManager		*myConnection;
+    URLManager		*myConnection;
 	NSString		*interval;
 	NSString		*ifIndex;
 	NSString		*ipaddress;
@@ -44,7 +44,7 @@
 	
     flapList = [[NSMutableArray alloc] init];
     
-    myConnection = [FlapManager sharedInstance];
+    myConnection = [URLManager sharedInstance];
     
     myConnection.delegate = self;
     
@@ -77,7 +77,7 @@
 
 	NSString *url = [NSString stringWithFormat: @"http://isweethome.ihome.ru/api/?ifindex=%@&flaphistory&host=%@&interval=%@", ifIndex, ipaddress, interval];
 
-	myConnection = [FlapManager sharedInstance];
+	myConnection = [URLManager sharedInstance];
 	
 	myConnection.delegate = self;
 	
@@ -116,6 +116,15 @@
 }
 
 
+- (void) connectionError: (NSError *) error
+{
+    [flapList removeAllObjects];
+    [self.tableView reloadData];
+    self.refreshButton.enabled = YES;
+}
+
+
+
 #pragma mark - Table Data Source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -136,11 +145,5 @@
 }
 
 
-- (void) connectionError: (NSError *) error
-{
-	[flapList removeAllObjects];
-	[self.tableView reloadData];
-	self.refreshButton.enabled = YES;
-}
-
 @end
+

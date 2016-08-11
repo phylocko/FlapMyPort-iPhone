@@ -8,17 +8,28 @@
 
 #import "FlapTableViewController.h"
 #import "FlapHistoryViewController.h"
-#import "FlapManager.h"
+#import "URLManager.h"
 #import "FlapCell.h"
 
 @interface FlapTableViewController () <UITableViewDataSource, UITableViewDelegate>
 {
 
-	FlapManager		*myConnection;
+    URLManager		*myConnection;
 	NSString		*interval;
-	NSMutableArray	*hosts;
+    
+	NSMutableArray	*flapList;
+
     BOOL  connectionError;
     NSError *connError;
+    
+    NSString        *oldestFlapID;
+    NSString        *lastOldestFlapID;
+    
+    NSUserDefaults  *config;
+    NSString        *ApiUrl;
+    
+    NSString        *UserLogin;
+    NSString        *UserPassword;
 
 }
 
@@ -26,6 +37,31 @@
 
 
 @implementation FlapTableViewController
+
+
+- (void) viewDidLoad
+{
+    
+    flapList = [[NSMutableArray alloc] init];
+    
+    config = [NSUserDefaults standardUserDefaults];
+    
+    [self disableControls];
+    
+    [self updateInterval];
+    
+    
+    // NSString *url = [NSString stringWithFormat: @"http://isweethome.ihome.ru/api/?review&interval=%@", interval];
+    
+    
+    myConnection = [URLManager sharedInstance];
+    [myConnection createSession];
+    
+    [self requestData];
+}
+
+
+#pragma mark - My Methods
 
 -(void) updateInterval
 {
@@ -42,6 +78,7 @@
 	[self setIntervalButtonTitle];
 }
 
+
 -(void) writeDefaultInterval
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -50,9 +87,9 @@
 	self.intervalButton.title = @"1 hour";
 }
 
+
 -(void) setIntervalButtonTitle
 {
-
 	
 	if([interval isEqualToString:@"600"])
 	{
@@ -75,53 +112,101 @@
 		self.intervalButton.title = @"Day";
 	}
 }
-- (void) viewDidLoad
+
+
+- (NSString *) prepareUrlWithInterval
 {
     
-    [self disableControls];
-	
-	[self updateInterval];
-	
-	
-	NSString *url = [NSString stringWithFormat: @"http://isweethome.ihome.ru/api/?review&interval=%@", interval];
-	
-	
-	myConnection = [FlapManager sharedInstance];
-	
-	myConnection.delegate = self;
-	
-	[myConnection getURL:url];
-	
-	
-	/* Анимированное обновление таблички */
-    /*
-	[UIView transitionWithView:self.tableView
-					  duration:0.95f
-					   options:UIViewAnimationOptionTransitionCrossDissolve
-					animations:^(void)
-	 {
-		 [self.tableView reloadData];
-	 }
-					completion: nil];
-	*/
+    NSString *url = [NSString stringWithFormat:@"%@/?review&interval=%@", ApiUrl, interval];
+    return url;
 }
+
+
+- (void) requestData
+{
+    [self pullConfig];
+    [self disableControls];
+    [self updateInterval];
+    
+    myConnection = [URLManager sharedInstance];
+    myConnection.UserLogin = UserLogin;
+    myConnection.UserPassword = UserPassword;
+    myConnection.delegate = self;
+    [myConnection getURL:[self prepareUrlWithInterval]];
+
+}
+
+- (void) pullConfig
+{
+    config = [NSUserDefaults standardUserDefaults];
+    
+    if([config valueForKey:@"UserLogin"] == nil)
+    {
+        [config setObject:@"" forKey:@"UserLogin"];
+    }
+    if([config valueForKey:@"UserPassword"] == nil)
+    {
+        [config setObject:@"" forKey:@"UserPassword"];
+    }
+    if([config valueForKey:@"ApiUrl"] == nil)
+    {
+        [config setObject:@"" forKey:@"ApiUrl"];
+    }
+    UserLogin = [config valueForKey:@"UserLogin"];
+    UserPassword = [config valueForKey:@"UserPassword"];
+    
+    ApiUrl = [config valueForKey:@"ApiUrl"];
+    
+}
+
+
+- (void) enableControls
+{
+    self.refreshButton.enabled = YES;
+    self.tableView.userInteractionEnabled = YES;
+    [self.refreshControl endRefreshing];
+}
+
+- (void) disableControls
+{
+    self.refreshButton.enabled = NO;
+    self.tableView.userInteractionEnabled = NO;
+    [self.refreshControl beginRefreshing];
+}
+
+- (NSString *) shortDate: (NSString *) dateString
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    
+    [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    
+    NSDate *date = [formatter dateFromString:dateString];
+    
+    NSDateFormatter *shortFormatter = [[NSDateFormatter alloc] init];
+    [shortFormatter setTimeStyle:NSDateFormatterMediumStyle];
+    
+    
+    return [shortFormatter stringFromDate:date];
+    
+    //	return @"9:04:44";
+}
+
+- (NSString *) getCredentials
+{
+    NSString *credentials = [NSString stringWithFormat:@"%@:%@", UserLogin, UserPassword];
+    NSData *authData = [credentials dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *encodedHeader = [authData base64EncodedDataWithOptions:0];
+    NSString *encodedString = [[NSString alloc] initWithData:encodedHeader encoding:NSUTF8StringEncoding];
+    NSString *readyString = [NSString stringWithFormat:@"Basic %@", encodedString];
+    
+    return readyString;
+}
+
+
+#pragma mark - Button Operations
 - (IBAction)refreshButtonTap:(UIBarButtonItem *)sender {
 	
-    [self disableControls];
-    
-	[self updateInterval];
-	
-    connectionError = NO;
-
-	NSString *url = [NSString stringWithFormat: @"http://isweethome.ihome.ru/api/?review&interval=%@", interval];
-	
-	myConnection = [FlapManager sharedInstance];
-	
-	myConnection.delegate = self;
-	
-	self.refreshButton.enabled = NO;
-	
-	[myConnection getURL:url];
+    [self requestData];
 	
 }
 
@@ -129,39 +214,43 @@
 
 - (void)refresh: (NSMutableData *) data
 {
-	
-	[self updateInterval];
-	
-	self.data = data;
-	
-	if(_data != nil)
-	{
-
-		NSError *jsonError;
-		NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data
-															 options:NSJSONReadingMutableContainers
-															   error:&jsonError];
-		
-		hosts = [json objectForKey:@"hosts"];
-		// NSDictionary *params = [json objectForKey:@"params"];
-		
-		for (id host in hosts)
-		{
-
-			if([[host valueForKey:@"name"] isKindOfClass:[NSNull class]])
-			{
-				[host setValue:[host valueForKey:@"ipaddress"] forKey:@"name"];
-			}
-		}
-	}
-	else
-	{
-		NSLog(@"Null is given.");
-	}
-	
-	[self.tableView reloadData];
-	
+    NSLog(@"Refresh method started");
+    [flapList removeAllObjects];
+    
+    if(data != nil)
+    {
+        [flapList removeAllObjects];
+        
+        NSError *dataError = [NSError alloc];
+        
+        NSDictionary *response = [NSJSONSerialization JSONObjectWithData:data options:0 error:&dataError];
+        
+        if(!response)
+        {
+            NSLog(@"Обработать вывод ошибки. Надо ж ее как-то выводить, правда?");
+            [self.tableView reloadData];
+            [self enableControls];
+            return;
+        }
+        else
+        {
+            if(![response isKindOfClass:[NSNull class]])
+            {
+                [self parseResponse:response];
+        
+            }
+            else
+            {
+                NSLog(@"Обработать вывод ошибки. Надо ж ее как-то выводить, правда?");
+                return;
+            }
+        }
+    }
+    
+    [self.tableView reloadData];
+    
     [self enableControls];
+    
 	
 }
 
@@ -174,49 +263,159 @@
 	
 }
 
+- (void) parseResponse: (NSDictionary *) response
+{
+    NSArray *sourceHosts = [response objectForKey:@"hosts"];
+ 
+    for (NSDictionary *sourceHost in sourceHosts)
+    {
+        if (sourceHost)
+        {
+            
+            NSString *ipaddress = [sourceHost objectForKey:@"ipaddress"];
+            
+            if(ipaddress)
+            {
+                // Object that will be stored in flapList
+                NSMutableDictionary *host = [[NSMutableDictionary alloc] init];
+
+                
+                NSString *ipaddress = [sourceHost objectForKey:@"ipaddress"];
+                NSString *hostname = [sourceHost objectForKey:@"name"];
+                
+                if(!ipaddress || [ipaddress isKindOfClass:[NSNull class]])
+                {
+                    ipaddress = @"-";
+                }
+                
+                if(!hostname || [hostname isKindOfClass:[NSNull class]])
+                {
+                    hostname = ipaddress;
+                }
+
+                [host setObject:ipaddress forKey:@"ipaddress"];
+                [host setObject:hostname forKey:@"hostname"];
+
+                NSArray *sourcePorts = [sourceHost objectForKey:@"ports"];
+                
+                if(sourcePorts)
+                {
+                    NSMutableArray *ports = [self parsePorts:sourcePorts];
+                    NSLog(@" --- WE have some ports: %@", [ports description]);
+                    [host setObject:ports forKey:@"ports"];
+                }
+                
+                NSLog(@" INIT HOST DESCRICTION:\r\n%@", [host description]);
+                
+                [flapList addObject:host];
+                
+            }
+        }
+
+    
+    }
+    NSLog(@"Ok here");
+}
+
+- (NSMutableArray *) parsePorts: (NSArray *) sourcePorts
+{
+    NSMutableArray *ports = [[NSMutableArray alloc] init];
+    
+    for (NSDictionary *sourcePort in sourcePorts)
+    {
+        // Object for adding to ports array
+        NSMutableDictionary *item = [[NSMutableDictionary alloc] init];
+        
+
+        // ifAlias
+        [item setObject:@"" forKey:@"ifAlias"];
+        NSString *ifAlias = [sourcePort objectForKey:@"ifAlias"];
+        if(ifAlias) [item setObject:ifAlias forKey:@"ifAlias"];
+        
+        
+        // ifName
+        [item setObject:@"" forKey:@"ifName"];
+        NSString *ifName = [sourcePort objectForKey:@"ifName"];
+        if(ifName) [item setObject:ifName forKey:@"ifName"];
+        
+        
+        // ifOperStatus
+        [item setObject:@"" forKey:@"ifOperStatus"];
+        NSString *ifOperStatus = [sourcePort objectForKey:@"ifOperStatus"];
+        if(ifOperStatus) [item setObject:ifOperStatus forKey:@"ifOperStatus"];
+        
+        
+        // ifIndex
+        [item setObject:@"" forKey:@"ifIndex"];
+        NSString *ifIndex = [sourcePort objectForKey:@"ifIndex"];
+        if(ifIndex) [item setObject:ifIndex forKey:@"ifIndex"];
+        
+        // flapCount
+        [item setObject:@"" forKey:@"flapCount"];
+        NSString *flapCount = [sourcePort objectForKey:@"flapCount"];
+        if(flapCount) [item setObject:flapCount forKey:@"flapCount"];
+        
+        // firstFlapTime
+        [item setObject:@"" forKey:@"firstFlapTime"];
+        NSString *firstFlapTime = [sourcePort objectForKey:@"firstFlapTime"];
+        if(firstFlapTime) [item setObject:firstFlapTime forKey:@"firstFlapTime"];
+        
+        // lastFlapTime
+        [item setObject:@"" forKey:@"lastFlapTime"];
+        NSString *lastFlapTime = [sourcePort objectForKey:@"lastFlapTime"];
+        if(lastFlapTime) [item setObject:lastFlapTime forKey:@"lastFlapTime"];
+        
+        [ports addObject:item];
+    }
+
+    return ports;
+}
 
 #pragma mark - Table Data Source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if([hosts count]==0)
-    {
-        return 1;
-    }
+    //if([flapList count]==0)
+    //{
+    //    return 1;
+    //}
     
-    return [hosts count];
+    return [flapList count];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if([hosts count]==0)
+    NSLog(@"titleForHeaderInSection method started");
+    if([flapList count]==0)
     {
         return @"";
     }
-    NSArray *host = [hosts objectAtIndex:section];
-	return [host valueForKey:@"name"];
+    NSArray *host = [flapList objectAtIndex:section];
+    
+
+	return [host valueForKey:@"hostname"];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if([hosts count]==0)
+    if([flapList count]==0)
     {
-        NSLog(@"Host count is 0. Returning 1");
         return 1;
     }
     
-    if([[[hosts objectAtIndex:section] valueForKey:@"ports"] count]==0)
+    if([[[flapList objectAtIndex:section] valueForKey:@"ports"] count]==0)
     {
-        NSLog(@"Hosts not found. Returning 1");
         return 1;
     }
 
-    return [[[hosts objectAtIndex:section] valueForKey:@"ports"] count];
+    return [[[flapList objectAtIndex:section] valueForKey:@"ports"] count];
 }
 
 - (UITableViewCell *)tableView: (UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if([hosts count]==0)
+    NSLog(@"cellForRowAtIndexPath method started");
+    
+    if([flapList count]==0)
     {
         if(connectionError == YES)
         {
@@ -229,7 +428,7 @@
         return cell;
     }
 
-	NSArray *host = [hosts objectAtIndex:indexPath.section];
+	NSArray *host = [flapList objectAtIndex:indexPath.section];
 	
 	NSArray *ports = [host valueForKey:@"ports"];
 	NSDictionary *port = [ports objectAtIndex:indexPath.row];
@@ -250,37 +449,44 @@
 	{
 		cell.interfaceLabel.text = [NSString stringWithFormat:@"%@ (%@)", [port valueForKey:@"ifName"], [port valueForKey:@"ifAlias"]];
 	}
-	
+    cell.flapNumberLabel.textColor = [UIColor colorWithRed:0.f green:0.8f blue:0.4f alpha:1.0f];
+    
 	if([[port valueForKey:@"ifOperStatus"] isEqualToString:@"down"])
 	{
-		cell.flapNumberLabel.textColor = [UIColor redColor];
+		cell.flapNumberLabel.textColor = [UIColor colorWithRed:0.9f green:0.5f blue:0.5f alpha:1.0f];
 	}
 	cell.flapNumberLabel.text = [port valueForKey:@"flapCount"];
 
+    
 	// Preparing the Array for FlapCell
-	NSDictionary *flap = @{@"hostname":  [host valueForKey:@"name"],
+	NSDictionary *flap = @{@"hostname":  [host valueForKey:@"hostname"],
 						   @"ipaddress": [host valueForKey:@"ipaddress"],
 						   @"port": port};
 
 	cell.flap = flap;
 	
 	// Load Diagram
-	NSString *urlString = [NSString stringWithFormat:@"http://isweethome.ihome.ru/api/?ifindex=%@&flapchart&host=%@&interval=%@", [port valueForKey:@"ifIndex"], [host valueForKey:@"ipaddress"], interval];
-	NSLog(@"URL: %@", urlString);
+	NSString *urlString = [NSString stringWithFormat:@"%@/?ifindex=%@&flapchart&host=%@&interval=%@", ApiUrl, [port valueForKey:@"ifIndex"], [host valueForKey:@"ipaddress"], interval];
 	
 	NSURL *url = [NSURL URLWithString:urlString];
-				  
-	NSURLSessionTask *task = [[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-		if (data) {
-			UIImage *image = [UIImage imageWithData:data];
-			if (image) {
-				dispatch_async(dispatch_get_main_queue(), ^{
-					cell.diagram.image = image;
-				});
-			}
-		}
-	}];
-	[task resume];
+
+    NSMutableURLRequest *req = [[NSMutableURLRequest alloc] initWithURL:url];
+    
+    [req setValue:[self getCredentials] forHTTPHeaderField:@"Authorization"];
+    
+    NSURLSessionTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        if (data) {
+            UIImage *image = [[UIImage alloc] initWithData:data];
+            if (image) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    cell.diagram.image = image;
+                });
+            }
+        }
+    }];
+    
+    [task resume];
 	
 	return cell;
 	
@@ -290,47 +496,25 @@
 	 */
 }
 
-- (void) enableControls
-{
-    self.refreshButton.enabled = YES;
-    self.tableView.userInteractionEnabled = YES;
-    [self.refreshControl endRefreshing];
-}
-
-- (void) disableControls
-{
-    self.refreshButton.enabled = NO;
-    self.tableView.userInteractionEnabled = NO;
-    [self.refreshControl beginRefreshing];
-}
-
-- (NSString *) shortDate: (NSString *) dateString
-{
-	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-	
-	[formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
-	
-	NSDate *date = [formatter dateFromString:dateString];
-	
-	NSDateFormatter *shortFormatter = [[NSDateFormatter alloc] init];
-	[shortFormatter setTimeStyle:NSDateFormatterMediumStyle];
-	
-	
-	return [shortFormatter stringFromDate:date];
-	
-//	return @"9:04:44";
-}
-
 - (void) connectionError: (NSError *) error
 {
     connectionError = YES;
 
     connError = error;
     
-    [hosts removeAllObjects];
+    [flapList removeAllObjects];
     
 	[self.tableView reloadData];
     [self enableControls];
+    
+
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Connection error" message:@"Yes, this is a connection error alert. Sorry." preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {}];
+    
+    [alert addAction:action];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+    
 }
 
 
