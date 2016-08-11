@@ -25,6 +25,8 @@
     NSString        *oldestFlapID;
     NSString        *lastOldestFlapID;
     
+    NSErrorDomain   FlapMyPortErrorDomain;
+    
     NSUserDefaults  *config;
     NSString        *ApiUrl;
     
@@ -42,9 +44,27 @@
 - (void) viewDidLoad
 {
     
+    FlapMyPortErrorDomain = @"FlapMyPortErrorDomain";
+    
     flapList = [[NSMutableArray alloc] init];
     
     config = [NSUserDefaults standardUserDefaults];
+    
+    if( [[config valueForKey:@"ApiUrl"] isEqualToString:@""] )
+    {
+        NSDictionary *userInfo = @{
+                                   NSLocalizedDescriptionKey: NSLocalizedString(@"You have to configure ApiUrl first.\r\n\r\nPlease open the Settings.app and scroll down no FlapMyPort bundle.", nil),
+
+                                   };
+        
+        NSError *error = [NSError errorWithDomain:FlapMyPortErrorDomain code:1 userInfo:userInfo];
+        
+        [self enableControls];
+
+        [self pushError:error title:@"Configuration error"];
+        
+        return;
+    }
     
     [self disableControls];
     
@@ -125,6 +145,28 @@
 - (void) requestData
 {
     [self pullConfig];
+    
+    if( [[config valueForKey:@"ApiUrl"] isEqualToString:@""] )
+    {
+        NSDictionary *userInfo = @{
+                                   NSLocalizedDescriptionKey: NSLocalizedString(@"You have to configure ApiUrl first.\r\n\r\nPlease open the Settings.app and scroll down no FlapMyPort bundle.", nil),
+                                   
+                                   };
+        
+        NSErrorDomain FlapMyPortErrorDomain = @"FlapMyPortErrorDomain";
+        
+        NSError *error = [NSError errorWithDomain:FlapMyPortErrorDomain code:1 userInfo:userInfo];
+        
+        [self enableControls];
+        
+        [self pushError:error title:@"Configuration error"];
+        
+
+        
+        return;
+    }
+
+    
     [self disableControls];
     [self updateInterval];
     
@@ -162,9 +204,10 @@
 
 - (void) enableControls
 {
+    [self.refreshControl endRefreshing];
     self.refreshButton.enabled = YES;
     self.tableView.userInteractionEnabled = YES;
-    [self.refreshControl endRefreshing];
+
 }
 
 - (void) disableControls
@@ -214,7 +257,6 @@
 
 - (void)refresh: (NSMutableData *) data
 {
-    NSLog(@"Refresh method started");
     [flapList removeAllObjects];
     
     if(data != nil)
@@ -227,9 +269,19 @@
         
         if(!response)
         {
-            NSLog(@"Обработать вывод ошибки. Надо ж ее как-то выводить, правда?");
+            
             [self.tableView reloadData];
             [self enableControls];
+            
+            NSString *userInfoLS = [NSString stringWithFormat:@"Ingorrect data received from URL %@\r\n\r\nPlease check you settings in the Settings.app.", ApiUrl];
+            
+            NSDictionary *userInfo = @{
+                                       NSLocalizedDescriptionKey: NSLocalizedString(userInfoLS, nil)
+                                       };
+            
+            NSError *error = [NSError errorWithDomain:FlapMyPortErrorDomain code:2 userInfo:userInfo];
+            
+            [self pushError:error title:@"Data error"];
             return;
         }
         else
@@ -241,7 +293,7 @@
             }
             else
             {
-                NSLog(@"Обработать вывод ошибки. Надо ж ее как-то выводить, правда?");
+                NSLog(@"Обработать вывод ошибки. Надо ж ее как-то выводить, правда? 2");
                 return;
             }
         }
@@ -301,20 +353,15 @@
                 if(sourcePorts)
                 {
                     NSMutableArray *ports = [self parsePorts:sourcePorts];
-                    NSLog(@" --- WE have some ports: %@", [ports description]);
+
                     [host setObject:ports forKey:@"ports"];
                 }
-                
-                NSLog(@" INIT HOST DESCRICTION:\r\n%@", [host description]);
                 
                 [flapList addObject:host];
                 
             }
         }
-
-    
     }
-    NSLog(@"Ok here");
 }
 
 - (NSMutableArray *) parsePorts: (NSArray *) sourcePorts
@@ -385,7 +432,6 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSLog(@"titleForHeaderInSection method started");
     if([flapList count]==0)
     {
         return @"";
@@ -413,7 +459,6 @@
 
 - (UITableViewCell *)tableView: (UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"cellForRowAtIndexPath method started");
     
     if([flapList count]==0)
     {
@@ -498,22 +543,13 @@
 
 - (void) connectionError: (NSError *) error
 {
-    connectionError = YES;
-
-    connError = error;
     
     [flapList removeAllObjects];
     
 	[self.tableView reloadData];
     [self enableControls];
     
-
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Connection error" message:@"Yes, this is a connection error alert. Sorry." preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {}];
-    
-    [alert addAction:action];
-    
-    [self presentViewController:alert animated:YES completion:nil];
+    [self pushError:error title:@"Connection error"];
     
 }
 
@@ -532,6 +568,14 @@
 		destination.flap = sender.flap;
 	}
 	
+}
+
+- (void) pushError: (NSError * ) error title: (NSString *) title
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:[error localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {}];
+    [alert addAction:action];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 

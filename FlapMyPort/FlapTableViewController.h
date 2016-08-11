@@ -16,6 +16,7 @@
 - (void) updateInterval;
 - (void) enableControls;
 - (void) disableControls;
+- (void) pushError: (NSError * ) error title: (NSString *) title;
 
 - (NSString *) shortDate: (NSString *) dateString;
 
