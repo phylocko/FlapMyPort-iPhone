@@ -50,7 +50,7 @@
     
     [myConnection getURL:url];
     
-    /* Анимированное обновление таблички */
+    /* Animated refresh */
     [UIView transitionWithView:self.tableView
                       duration:0.95f
                        options:UIViewAnimationOptionTransitionCrossDissolve
@@ -92,9 +92,7 @@
 - (void)refresh: (NSMutableData *) data
 {
 	self.refreshButton.enabled = YES;
-	
-    //NSString *myData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-	//NSLog(@"Refresh method was called; %@", myData);
+
 	
 	if(data != nil)
 	{

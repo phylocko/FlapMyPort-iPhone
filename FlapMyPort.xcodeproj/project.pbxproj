@@ -16,7 +16,6 @@
 		F5B60A471D5116DE0088A5FA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5B60A451D5116DE0088A5FA /* Main.storyboard */; };
 		F5B60A491D5116DE0088A5FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5B60A481D5116DE0088A5FA /* Assets.xcassets */; };
 		F5B60A4C1D5116DE0088A5FA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5B60A4A1D5116DE0088A5FA /* LaunchScreen.storyboard */; };
-		F5B60A561D5117250088A5FA /* FlapManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B60A551D5117250088A5FA /* FlapManager.m */; };
 		F5B60A5E1D5117410088A5FA /* HostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B60A591D5117410088A5FA /* HostCell.m */; };
 		F5B60A5F1D5117410088A5FA /* FlapCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B60A5B1D5117410088A5FA /* FlapCell.m */; };
 		F5B60A601D5117410088A5FA /* FlapHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B60A5D1D5117410088A5FA /* FlapHistoryCell.m */; };
@@ -41,8 +40,6 @@
 		F5B60A481D5116DE0088A5FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F5B60A4B1D5116DE0088A5FA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F5B60A4D1D5116DE0088A5FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F5B60A541D5117250088A5FA /* FlapManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlapManager.h; sourceTree = "<group>"; };
-		F5B60A551D5117250088A5FA /* FlapManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlapManager.m; sourceTree = "<group>"; };
 		F5B60A581D5117410088A5FA /* HostCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostCell.h; sourceTree = "<group>"; };
 		F5B60A591D5117410088A5FA /* HostCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HostCell.m; sourceTree = "<group>"; };
 		F5B60A5A1D5117410088A5FA /* FlapCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlapCell.h; sourceTree = "<group>"; };
@@ -127,8 +124,6 @@
 			children = (
 				F57C308A1D5CAA6300EAFF0F /* URLManager.h */,
 				F57C308B1D5CAA6300EAFF0F /* URLManager.m */,
-				F5B60A541D5117250088A5FA /* FlapManager.h */,
-				F5B60A551D5117250088A5FA /* FlapManager.m */,
 			);
 			name = Manager;
 			sourceTree = "<group>";
@@ -228,7 +223,6 @@
 				F5B60A6C1D5118060088A5FA /* FlapHistoryViewController.m in Sources */,
 				F5B60A6D1D5118060088A5FA /* FlapsOptionsViewController.m in Sources */,
 				F5B60A411D5116DE0088A5FA /* AppDelegate.m in Sources */,
-				F5B60A561D5117250088A5FA /* FlapManager.m in Sources */,
 				F5B60A601D5117410088A5FA /* FlapHistoryCell.m in Sources */,
 				F57C308C1D5CAA6300EAFF0F /* URLManager.m in Sources */,
 				F5B60A6B1D5118060088A5FA /* FlapTableViewController.m in Sources */,

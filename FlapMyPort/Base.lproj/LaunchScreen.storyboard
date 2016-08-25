@@ -18,12 +18,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="w180.png" translatesAutoresizingMaskIntoConstraints="NO" id="hHB-0R-RE2">
-                                <frame key="frameInset" minX="97" minY="243" width="180" height="180"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="w180.png" translatesAutoresizingMaskIntoConstraints="NO" id="hHB-0R-RE2">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="180" id="5aH-2K-Dhv"/>
+                                    <constraint firstAttribute="height" constant="180" id="PjC-t9-hqu"/>
+                                </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Vladislav Pavkin, 2016" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xm0-Dm-FIF">
+                                <frame key="frameInset" minX="102" minY="626" width="170" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="hHB-0R-RE2" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="8UG-df-4dR"/>
+                            <constraint firstItem="Xm0-Dm-FIF" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="KsE-Uo-Fgq"/>
+                            <constraint firstItem="hHB-0R-RE2" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="ldi-sR-aX7"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="Xm0-Dm-FIF" secondAttribute="bottom" constant="20" id="ylW-Ih-r1e"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>

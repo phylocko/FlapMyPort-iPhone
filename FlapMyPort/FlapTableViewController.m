@@ -19,13 +19,11 @@
     
 	NSMutableArray	*flapList;
 
-    BOOL  connectionError;
-    NSError *connError;
+    BOOL            connectionError;
+    NSError         *connError;
     
     NSString        *oldestFlapID;
     NSString        *lastOldestFlapID;
-    
-    NSErrorDomain   FlapMyPortErrorDomain;
     
     NSUserDefaults  *config;
     NSString        *ApiUrl;
@@ -44,35 +42,26 @@
 - (void) viewDidLoad
 {
     
-    FlapMyPortErrorDomain = @"FlapMyPortErrorDomain";
-    
     flapList = [[NSMutableArray alloc] init];
     
     config = [NSUserDefaults standardUserDefaults];
     
-    if( [[config valueForKey:@"ApiUrl"] isEqualToString:@""] )
+    if([self apiIsDefault] == YES)
     {
-        NSDictionary *userInfo = @{
-                                   NSLocalizedDescriptionKey: NSLocalizedString(@"You have to configure ApiUrl first.\r\n\r\nPlease open the Settings.app and scroll down no FlapMyPort bundle.", nil),
-
-                                   };
+        NSString *message = @"You have VirtualAPI link configured so you are seeing demo data.\r\nPlease open Settings.app and configure your URL.\r\n\r\nVisit flapmyport.com for detailed instructions how to run FlapMyPort server on your network.";
         
-        NSError *error = [NSError errorWithDomain:FlapMyPortErrorDomain code:1 userInfo:userInfo];
-        
-        [self enableControls];
-
-        [self pushError:error title:@"Configuration error"];
-        
-        return;
+        [self showAlert:message title:@"No URL Configured"];
+    }
+    
+    if ([self apiUrlExists] == NO)
+    {
+        [self setDefaultApiUrl];
+        [self showAlert:@"You have no API URL configured so we're going to use VirtualAPI. Please open Preferences and type your URL." title:@"No URL Configured"];
     }
     
     [self disableControls];
     
     [self updateInterval];
-    
-    
-    // NSString *url = [NSString stringWithFormat: @"http://isweethome.ihome.ru/api/?review&interval=%@", interval];
-    
     
     myConnection = [URLManager sharedInstance];
     [myConnection createSession];
@@ -86,7 +75,13 @@
 -(void) updateInterval
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	interval = [defaults stringForKey:@"flapHistoryInterval"];
+
+    if ( [defaults stringForKey:@"flapHistoryInterval"] == nil)
+    {
+        [self writeDefaultInterval];
+    }
+    
+    interval = [defaults stringForKey:@"flapHistoryInterval"];
 
 	
 	if([interval isEqualToString:@""])
@@ -105,6 +100,8 @@
 	[defaults setValue:@"3600" forKey:@"flapHistoryInterval"];
 	
 	self.intervalButton.title = @"1 hour";
+    interval = @"3600";
+
 }
 
 
@@ -148,20 +145,13 @@
     
     if( [[config valueForKey:@"ApiUrl"] isEqualToString:@""] )
     {
-        NSDictionary *userInfo = @{
-                                   NSLocalizedDescriptionKey: NSLocalizedString(@"You have to configure ApiUrl first.\r\n\r\nPlease open the Settings.app and scroll down no FlapMyPort bundle.", nil),
-                                   
-                                   };
-        
-        NSErrorDomain FlapMyPortErrorDomain = @"FlapMyPortErrorDomain";
-        
-        NSError *error = [NSError errorWithDomain:FlapMyPortErrorDomain code:1 userInfo:userInfo];
-        
-        [self enableControls];
-        
-        [self pushError:error title:@"Configuration error"];
-        
 
+        [self enableControls];
+
+        
+        NSString *message = @"You have to configure ApiUrl first.\r\n\r\nPlease open the Settings.app and scroll down no FlapMyPort bundle.";
+        [self showAlert:message title:@"Configuration error"];
+        
         
         return;
     }
@@ -245,6 +235,36 @@
     return readyString;
 }
 
+- (BOOL) apiUrlExists
+{
+    if([config valueForKey:@"ApiUrl"] == nil)
+    {
+        return NO;
+    }
+    
+    if([[config valueForKey:@"ApiUrl"] isEqualToString:@""])
+    {
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (void) setDefaultApiUrl
+{
+    [config setObject:@"http://virtualapi.flapmyport.com" forKey:@"ApiUrl"];
+}
+
+- (BOOL) apiIsDefault
+{
+    if( [[config valueForKey:@"ApiUrl"] isEqualToString:@"http://virtualapi.flapmyport.com"])
+    {
+        return YES;
+    }
+    
+    return NO;
+}
+
 
 #pragma mark - Button Operations
 - (IBAction)refreshButtonTap:(UIBarButtonItem *)sender {
@@ -273,15 +293,9 @@
             [self.tableView reloadData];
             [self enableControls];
             
-            NSString *userInfoLS = [NSString stringWithFormat:@"Ingorrect data received from URL %@\r\n\r\nPlease check you settings in the Settings.app.", ApiUrl];
-            
-            NSDictionary *userInfo = @{
-                                       NSLocalizedDescriptionKey: NSLocalizedString(userInfoLS, nil)
-                                       };
-            
-            NSError *error = [NSError errorWithDomain:FlapMyPortErrorDomain code:2 userInfo:userInfo];
-            
-            [self pushError:error title:@"Data error"];
+            NSString *userInfoLS = [NSString stringWithFormat:@"Incorrect data received from URL %@\r\n\r\nPlease check your settings in the Settings.app.", ApiUrl];
+            [self showAlert:userInfoLS title:@"Data error"];
+
             return;
         }
         else
@@ -293,7 +307,7 @@
             }
             else
             {
-                NSLog(@"Обработать вывод ошибки. Надо ж ее как-то выводить, правда? 2");
+                [self showAlert:@"API Returned a null response." title:@"Data error"];
                 return;
             }
         }
@@ -421,12 +435,7 @@
 #pragma mark - Table Data Source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    //if([flapList count]==0)
-    //{
-    //    return 1;
-    //}
-    
+{    
     return [flapList count];
 }
 
@@ -512,33 +521,32 @@
 	
 	// Load Diagram
 	NSString *urlString = [NSString stringWithFormat:@"%@/?ifindex=%@&flapchart&host=%@&interval=%@", ApiUrl, [port valueForKey:@"ifIndex"], [host valueForKey:@"ipaddress"], interval];
-	
-	NSURL *url = [NSURL URLWithString:urlString];
 
-    NSMutableURLRequest *req = [[NSMutableURLRequest alloc] initWithURL:url];
-    
-    [req setValue:[self getCredentials] forHTTPHeaderField:@"Authorization"];
-    
-    NSURLSessionTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        
-        if (data) {
-            UIImage *image = [[UIImage alloc] initWithData:data];
-            if (image) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    cell.diagram.image = image;
-                });
+    if([[flap valueForKey:@"image"] isKindOfClass:[UIImage class]])
+    {
+        cell.diagram.image = [flap valueForKey:@"image"];
+    }
+    else
+    {
+        NSURL *url = [NSURL URLWithString:urlString];
+        NSMutableURLRequest *req = [[NSMutableURLRequest alloc] initWithURL:url];
+        [req setValue:[self getCredentials] forHTTPHeaderField:@"Authorization"];
+        NSURLSessionTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            
+            if (data) {
+                UIImage *image = [[UIImage alloc] initWithData:data];
+                if (image) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        cell.diagram.image = image;
+                    });
+                }
             }
-        }
-    }];
-    
-    [task resume];
-	
+        }];
+        [task resume];
+
+    }
 	return cell;
-	
-	/*
-		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"emptyCell" forIndexPath:indexPath];
-		return cell;
-	 */
+
 }
 
 - (void) connectionError: (NSError *) error
@@ -548,7 +556,7 @@
     
 	[self.tableView reloadData];
     [self enableControls];
-    
+    [self.refreshControl endRefreshing];
     [self pushError:error title:@"Connection error"];
     
 }
@@ -578,5 +586,12 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void) showAlert: (NSString *) message title: (NSString *) title
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {}];
+    [alert addAction:action];
+    [self presentViewController:alert animated:YES completion:nil];
+}
 
 @end

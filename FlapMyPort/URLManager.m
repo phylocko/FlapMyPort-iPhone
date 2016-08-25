@@ -35,7 +35,6 @@
 
 - (void) getURL: (NSString *) urlString
 {
-    NSLog(@"Requesting url %@", urlString);
     self.data = [[NSMutableData alloc] init];
     
     NSURL *url = [NSURL URLWithString:urlString];

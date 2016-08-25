@@ -49,36 +49,30 @@
 {
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	// FlapTableViewController *destination = [segue destinationViewController];
 	
 	if(self.intervalPicker.selectedSegmentIndex == 0)
 	{
-		//destination.intervalButton.title = @"10 минут";
 		[defaults setValue:@"600" forKey:@"flapHistoryInterval"];
 	}
     else
     if(self.intervalPicker.selectedSegmentIndex == 1)
     {
-        //destination.intervalButton.title = @"Час";
         [defaults setValue:@"3600" forKey:@"flapHistoryInterval"];
     }
     else
     if(self.intervalPicker.selectedSegmentIndex == 2)
     {
-        //destination.intervalButton.title = @"3 часа";
         [defaults setValue:@"10800" forKey:@"flapHistoryInterval"];
     }
     else
     if(self.intervalPicker.selectedSegmentIndex == 3)
     {
-        //destination.intervalButton.title = @"6 часов";
         [defaults setValue:@"21600" forKey:@"flapHistoryInterval"];
 		NSLog(@"21600 - is a new interval!");
     }
     else
     if(self.intervalPicker.selectedSegmentIndex == 4)
     {
-        //destination.intervalButton.title = @"Сутки";
         [defaults setValue:@"86400" forKey:@"flapHistoryInterval"];
     }
 }
