@@ -518,9 +518,6 @@
 						   @"port": port};
 
 	cell.flap = flap;
-	
-	// Load Diagram
-	NSString *urlString = [NSString stringWithFormat:@"%@/?ifindex=%@&flapchart&host=%@&interval=%@", ApiUrl, [port valueForKey:@"ifIndex"], [host valueForKey:@"ipaddress"], interval];
 
     if([[flap valueForKey:@"image"] isKindOfClass:[UIImage class]])
     {
@@ -528,6 +525,14 @@
     }
     else
     {
+        // load a diagram (flapchart) image
+        NSString *urlString = [
+            NSString stringWithFormat:@"%@/?ifindex=%@&flapchart&host=%@&interval=%@",
+            ApiUrl,
+            [port valueForKey:@"ifIndex"],
+            [host valueForKey:@"ipaddress"], interval
+        ];
+
         NSURL *url = [NSURL URLWithString:urlString];
         NSMutableURLRequest *req = [[NSMutableURLRequest alloc] initWithURL:url];
         [req setValue:[self getCredentials] forHTTPHeaderField:@"Authorization"];
